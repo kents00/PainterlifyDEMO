@@ -4,10 +4,10 @@ import bpy.utils.previews
 from bpy.types import Panel, Operator
 
 bl_info = {
-    "name": "Painterlify",
+    "name": "PainterlifyDEMO",
     "blender": (4, 2, 1),
     "category": "Compositing",
-    "location": "Compositing > Painterly",
+    "location": "Compositing > PainterlyDEMO",
     "version": (1, 0, 0),
     "author": "Kent Edoloverio",
     "description": "Adds Paint Overlay effect into compositing node",
@@ -22,7 +22,7 @@ class Painterly(Operator):
 
     def __init__(self):
         self.source_file = os.path.join(os.path.dirname(
-            __file__), "..", "Painterlify/data", "Painterly.blend")
+            __file__), "..", "PainterlifyDEMO/data", "PainterlyDEMO.blend")
 
     def import_file(self):
         if not os.path.isfile(self.source_file):
@@ -58,14 +58,12 @@ class Painterly(Operator):
         return {'FINISHED'}
 
     def add_node_group_to_compositing(self, node_group_name):
-        # Ensure we have an active node tree
         scene = bpy.context.scene
         node_tree = scene.node_tree
         if not node_tree:
             self.report({'ERROR'}, "No compositing node tree found.")
             return {'CANCELLED'}
 
-        # Get or create required nodes
         render_layers_node = None
         composite_node = None
 
@@ -80,12 +78,10 @@ class Painterly(Operator):
             return {'CANCELLED'}
 
         if not composite_node:
-            # Create Composite node if it doesn't exist
             composite_node = node_tree.nodes.new(
                 type='CompositorNodeComposite')
-            composite_node.location = (400, 0)  # Adjust as needed
+            composite_node.location = (400, 0)
 
-        # Import node group
         if node_group_name not in bpy.data.node_groups:
             self.report(
                 {'ERROR'}, "Node group not found in current blend data.")
@@ -97,12 +93,10 @@ class Painterly(Operator):
                 {'ERROR'}, "Node group not found: {}".format(node_group_name))
             return {'CANCELLED'}
 
-        # Add a new group node and configure it
         painterly_node = node_tree.nodes.new(type='CompositorNodeGroup')
         painterly_node.node_tree = node_group
-        painterly_node.location = (200, 0)  # Adjust as needed
+        painterly_node.location = (200, 0)
 
-        # Connect nodes
         node_tree.links.new(
             render_layers_node.outputs['Image'], painterly_node.inputs[0])
         node_tree.links.new(
@@ -116,13 +110,13 @@ class Painterly(Operator):
         if self.import_file() == {'CANCELLED'}:
             return {'CANCELLED'}
 
-        if self.import_node_group("Painterly") == {'CANCELLED'}:
+        if self.import_node_group("PainterlyDEMO") == {'CANCELLED'}:
             return {'CANCELLED'}
 
         if self.ensure_use_nodes() == {'CANCELLED'}:
             return {'CANCELLED'}
 
-        if self.add_node_group_to_compositing("Painterly") == {'CANCELLED'}:
+        if self.add_node_group_to_compositing("PainterlyDEMO") == {'CANCELLED'}:
             return {'CANCELLED'}
 
         return {'FINISHED'}

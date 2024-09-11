@@ -1,2 +1,2 @@
-# Painterly-Fusion
+# Painterlify
 Generates Painterly stlye in your meshes

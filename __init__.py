@@ -8,7 +8,7 @@ bl_info = {
     "blender": (4, 2, 1),
     "category": "Compositing",
     "location": "Compositing > PainterlyDEMO",
-    "version": (1, 0, 0),
+    "version": (2, 0, 0),
     "author": "Kent Edoloverio",
     "description": "Adds Paint Overlay effect into compositing node",
     "wiki_url": "",
@@ -19,10 +19,6 @@ bl_info = {
 class Painterly(Operator):
     bl_idname = "compnode.painterlyeffect"
     bl_label = "Painterlify"
-
-    def __init__(self):
-        self.source_file = os.path.join(os.path.dirname(
-            __file__), "..", "PainterlifyDEMO/data", "PainterlyDEMO.blend")
 
     def import_file(self):
         if not os.path.isfile(self.source_file):
@@ -107,6 +103,9 @@ class Painterly(Operator):
         return {'FINISHED'}
 
     def execute(self, context):
+        self.source_file = os.path.join(os.path.dirname(
+            __file__), "..", "PainterlifyDEMO/data", "PainterlyDEMO.blend")
+
         if self.import_file() == {'CANCELLED'}:
             return {'CANCELLED'}
 
